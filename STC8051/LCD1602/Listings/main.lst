@@ -1,0 +1,98 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              11/05/2024 20:45:51 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<string.h>
+   3          #include<intrins.h>
+   4          #define uchar unsigned char
+   5          #define uint unsigned int
+   6          sbit RS = P2^6;
+   7          sbit EN = P2^7;
+   8          sbit RW = P2^5;
+   9          uchar code table[] = {"Temp 27.0"};
+  10          void delay1ms(uint time);//N ms delay
+  11           void init_1602(void); //Initialize 1602
+  12           void writecmd_1602(uint cmd); //Write instruction function
+  13           void writedata_1602(uchar dat); //Write data function
+  14           void display(uchar num); //Display function
+  15           
+  16          int main()
+  17          {
+  18   1        delay1ms(10);
+  19   1         init_1602(); //Initialize 1602
+  20   1        delay1ms(5); 
+  21   1         writecmd_1602(0x82); //Set the starting position of the display
+  22   1        delay1ms(5);
+  23   1        display(strlen(table));
+  24   1        while(1);
+  25   1        return 0;
+  26   1      } 
+  27          void delay1ms(uint time)    
+  28          {
+  29   1          unsigned char a,b,i;
+  30   1        for(i = time; i != 0;i--)
+  31   1          for(b=199;b>0;b--)
+  32   1            for(a=1;a>0;a--);
+  33   1      }
+  34          void init_1602(void)
+  35          {
+  36   1         delay1ms(15); //Delay 15ms
+  37   1         writecmd_1602(0x38); //Mode setting
+  38   1       
+  39   1         writecmd_1602(0x0c); //Display settings
+  40   1        
+  41   1         writecmd_1602(0x06); //Display mode
+  42   1        
+  43   1         writecmd_1602(0x01); //Clear screen
+  44   1      }
+  45          void writecmd_1602(uint cmd)
+  46          {
+  47   1        RS = 0;
+  48   1        RW = 0;
+  49   1        P0 = cmd;
+  50   1        EN = 1;
+  51   1        delay1ms(1);
+  52   1        EN = 0;
+  53   1      }
+  54          void writedata_1602(uchar dat)
+C51 COMPILER V9.60.7.0   MAIN                                                              11/05/2024 20:45:51 PAGE 2   
+
+  55          {
+  56   1        RS = 1;
+  57   1        RW = 0;
+  58   1        P0 = dat;
+  59   1        EN = 1;
+  60   1        delay1ms(1);
+  61   1        EN = 0;
+  62   1      }
+  63          void display(uchar num)
+  64          {
+  65   1        uchar i;
+  66   1        for(i = 0; i < num; i++)
+  67   1        {
+  68   2          writedata_1602(table[i]);
+  69   2        }
+  70   1        delay1ms(5);
+  71   1      }
+*** WARNING C294 IN LINE 25 OF main.c: unreachable code
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    149    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
